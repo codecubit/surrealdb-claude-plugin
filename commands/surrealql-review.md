@@ -38,6 +38,17 @@ Walk the code and flag each issue with a severity and a fix. Use the checklist b
 - **`BEGIN/COMMIT` split across multiple SDK calls** — only atomic within one call.
 - **`DEFINE TABLE ... AS SELECT`** — remind that it's a materialized view, not writable.
 
+### Production-incident traps
+
+- **`$token` as query parameter** — reserved variable in v3. Flag and recommend `$tkn` or any other name.
+- **Bare string on `record<table>` field** — e.g. `WHERE userId = "user:abc"`. Flag; must use `type::record('user', $id)`.
+- **`DEFINE FIELD ... TYPE <non-optional> DEFAULT <X>` without backfill** — DEFAULT only runs on CREATE, not existing rows. SCHEMAFULL rejects NONE at READ time. Flag and require `UPDATE table SET field = X WHERE field IS NONE`.
+- **`DEFINE FIELD` without prior `DEFINE TABLE`** — auto-creates table as SCHEMALESS (ghost table). Flag; always define the table first.
+- **`INSIDE` with record-typed fields** — `WHERE field INSIDE ["table:id"]` silently returns 0 rows. Flag; use `type::record()` comparisons.
+- **`OVERWRITE` assuming it removes child definitions** — it doesn't remove DEFINE FIELD/INDEX/EVENT. Flag if user relies on OVERWRITE to clean slate.
+- **`SELECT ... ORDER BY field` where field is not in projections** — may fail or produce unexpected results. Flag.
+- **Passing JS `null` to `option<T>` field in SCHEMAFULL** — NULL is rejected, NONE (undefined) is accepted. Flag if visible in SDK context.
+
 ### Permissions
 
 - Any `DEFINE TABLE` **without `PERMISSIONS`** clause when record access is in use → flag as "permissions default to `NONE` for select/update/delete unless you're an operator. Add explicit `PERMISSIONS FOR ... WHERE ...`."

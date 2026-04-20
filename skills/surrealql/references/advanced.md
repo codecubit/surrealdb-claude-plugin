@@ -329,3 +329,59 @@ sequence::value(invoice_num);
 ```
 
 Sequences are database-scoped. Use them for invoice numbers, order numbers, or any business ID that must be sequential. Don't use them as primary keys — SurrealDB's record IDs are better for that.
+
+## Change Data Capture (CDC)
+
+Track every mutation on a table. Useful for audit trails, event sourcing, and replication.
+
+### Enable change tracking
+
+```surql
+DEFINE TABLE order CHANGEFEED 7d;  -- retain changes for 7 days
+```
+
+### Query changes
+
+```surql
+-- all changes since a timestamp
+SHOW CHANGES FOR TABLE order SINCE d'2026-04-01T00:00:00Z';
+
+-- returns: [{ changes: [{ define_table: ... }, { update: { id, ...data } }, ...], versionstamp: N }]
+```
+
+Each entry includes:
+- `versionstamp` — monotonic version number for ordering
+- `changes` — array of mutations (`create`, `update`, `delete`, `define_table`)
+
+### Time-travel queries (VERSION)
+
+Query data as it existed at a past point in time:
+
+```surql
+-- what did this order look like on March 15th?
+SELECT * FROM order:abc VERSION d'2026-03-15T10:00:00Z';
+
+-- compare current vs historical
+LET $now = (SELECT * FROM ONLY order:abc);
+LET $then = (SELECT * FROM ONLY order:abc VERSION d'2026-03-01T00:00:00Z');
+RETURN { current: $now.status, was: $then.status };
+
+-- historical aggregate: what was total revenue last month?
+SELECT math::sum(total) AS revenue
+FROM order
+WHERE status == "completed"
+VERSION d'2026-03-31T23:59:59Z';
+```
+
+`VERSION` works on any `SELECT` — single record, filtered, aggregated. Requires `CHANGEFEED` to be enabled on the table with sufficient retention.
+
+### Practical patterns
+
+```surql
+-- audit: who changed what, when?
+SHOW CHANGES FOR TABLE user SINCE time::now() - 24h;
+
+-- sync: feed changes to an external system since last sync
+SHOW CHANGES FOR TABLE order SINCE $last_versionstamp;
+-- store the latest versionstamp client-side for next sync
+```

@@ -25,7 +25,16 @@ These are different concerns. This plugin ships a skill for each, plus two slash
 
 ## Installation
 
-1. Install the plugin (drag-and-drop the `.plugin` file, or add the directory to your `plugins`).
+### From marketplace (recommended)
+
+```bash
+claude plugin marketplace add codecubit/surrealdb-claude-plugin
+claude plugin install surrealdb-v3@surrealdb-claude-plugin
+```
+
+### From source
+
+1. Clone the repo and install the plugin directory.
 2. For the MCP server, install dependencies once:
 
    ```bash
@@ -61,6 +70,7 @@ You can still override any of these per tool call — tool arguments take preced
 - **`surreal_sql`** — run ad-hoc SurrealQL via `surreal sql`. Supports multi-statement input.
 - **`surreal_import`** — apply a `.surql` file (or inline `content`) via `surreal import`.
 - **`surreal_export`** — dump a namespace/database to a `.surql` file (returned inline if no `path`).
+- **`surreal_info`** — run `INFO FOR DB`, `INFO FOR TABLE <name>`, or `INFO FOR NS` to inspect schema.
 
 ## Quick start
 
@@ -95,7 +105,7 @@ Both skills use progressive disclosure. The `SKILL.md` is short; dense material 
   - `references/permissions.md` — `$auth`-based row-level permissions, patterns, caveats.
   - `references/advanced.md` — live queries, transactions, full-text/vector search, GraphQL.
   - `references/auth.md` — `DEFINE ACCESS` types (RECORD / JWT / BEARER), v1→v3 migration.
-  - `references/gotchas.md` — 18 things that bite people.
+  - `references/gotchas.md` — 28 gotchas (18 common + 10 from production incidents).
 - `skills/surrealdb-js/`
   - `references/api.md` — every method on `Surreal`, every helper class.
   - `references/patterns.md` — connection lifecycle, auth flows, live-query reconnect, testing.

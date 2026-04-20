@@ -19,7 +19,7 @@ export function getDb(): Promise<Surreal> {
       await db.connect(process.env.SURREAL_URL!, {
         namespace: process.env.SURREAL_NS!,
         database: process.env.SURREAL_DB!,
-        auth: {
+        authentication: {                          // NOT auth: — renamed in SDK v2
           username: process.env.SURREAL_USER!,
           password: process.env.SURREAL_PASS!,
         },

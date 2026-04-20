@@ -7,6 +7,7 @@
 //   - surreal_sql         : run ad-hoc SurrealQL via `surreal sql`
 //   - surreal_import      : apply a .surql file via `surreal import`
 //   - surreal_export      : dump a namespace/database to a .surql file
+//   - surreal_info        : run INFO FOR DB / TABLE / NS to inspect schema
 //
 // Env vars (all optional — override per-tool-call with arguments):
 //   SURREAL_BIN   path or name of the surreal binary (default: "surreal")
@@ -175,6 +176,31 @@ const tools = [
       },
     },
   },
+  {
+    name: "surreal_info",
+    description:
+      "Inspect schema via `INFO FOR DB`, `INFO FOR TABLE <name>`, or `INFO FOR NS`. Returns table/field/index/event definitions.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        scope: {
+          type: "string",
+          enum: ["NS", "DB", "TABLE"],
+          description: "What to inspect: NS (namespace), DB (database), TABLE (specific table)",
+          default: "DB",
+        },
+        table: {
+          type: "string",
+          description: "Table name (required when scope is TABLE)",
+        },
+        url: { type: "string" },
+        namespace: { type: "string" },
+        database: { type: "string" },
+        username: { type: "string" },
+        password: { type: "string" },
+      },
+    },
+  },
 ];
 
 // ---------------------------------------------------------------------------
@@ -296,12 +322,36 @@ async function doExport(args) {
   };
 }
 
+async function doInfo(args) {
+  const conn = resolveConn(args);
+  const scope = (args.scope || "DB").toUpperCase();
+
+  let query;
+  if (scope === "TABLE") {
+    if (!args.table) throw new Error("missing table name for INFO FOR TABLE");
+    query = `INFO FOR TABLE ${args.table};`;
+  } else if (scope === "NS") {
+    query = "INFO FOR NS;";
+  } else {
+    query = "INFO FOR DB;";
+  }
+
+  const cliArgs = ["sql", "--conn", conn.url];
+  if (conn.ns)   cliArgs.push("--ns", conn.ns);
+  if (conn.db)   cliArgs.push("--db", conn.db);
+  if (conn.user) cliArgs.push("--user", conn.user);
+  if (conn.pass) cliArgs.push("--pass", conn.pass);
+  cliArgs.push("--pretty");
+
+  return formatResult(await run(env.bin, cliArgs, { stdin: query }));
+}
+
 // ---------------------------------------------------------------------------
 // MCP server wiring
 // ---------------------------------------------------------------------------
 
 const server = new Server(
-  { name: "surrealdb-v3", version: "0.1.0" },
+  { name: "surrealdb-v3", version: "0.2.0" },
   { capabilities: { tools: {} } },
 );
 
@@ -316,6 +366,7 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
       case "surreal_sql":      return await doSql(args || {});
       case "surreal_import":   return await doImport(args || {});
       case "surreal_export":   return await doExport(args || {});
+      case "surreal_info":     return await doInfo(args || {});
       default:
         return {
           content: [{ type: "text", text: `Unknown tool: ${name}` }],
