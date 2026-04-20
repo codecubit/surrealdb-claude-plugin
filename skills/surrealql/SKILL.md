@@ -36,6 +36,9 @@ Do not answer from memory for any substantive task. Read the matching file:
 | Row-level PERMISSIONS, `$auth`, `$session`, role checks               | `references/permissions.md`        |
 | Graph traversal, LIVE SELECT, transactions, full-text, vector, geo   | `references/advanced.md`           |
 | DEFINE ACCESS RECORD/JWT/BEARER, signup/signin, JWT verification     | `references/auth.md`               |
+| Record links vs graph edges vs embedding, when to denormalize         | `references/modeling.md`           |
+| Adding/removing/renaming fields safely, migration versioning          | `references/migrations.md`         |
+| Common real-world queries (pagination, search, upsert, graphs)        | `references/cookbook.md`            |
 | Anything weird, failing, or version-sensitive                         | `references/gotchas.md`            |
 
 ## Minimum-ceremony defaults

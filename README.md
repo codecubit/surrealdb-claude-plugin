@@ -105,6 +105,9 @@ Both skills use progressive disclosure. The `SKILL.md` is short; dense material 
   - `references/permissions.md` — `$auth`-based row-level permissions, patterns, caveats.
   - `references/advanced.md` — live queries, transactions, full-text/vector search, GraphQL.
   - `references/auth.md` — `DEFINE ACCESS` types (RECORD / JWT / BEARER), v1→v3 migration.
+  - `references/modeling.md` — decision tree: record links vs graph edges vs embedding, anti-patterns, denormalization.
+  - `references/migrations.md` — safe schema evolution: add/remove/rename fields, backfill pattern, versioning traps.
+  - `references/cookbook.md` — 10 real-world recipes: pagination, full-text search, graph recommendations, transactions, soft delete.
   - `references/gotchas.md` — 28 gotchas (18 common + 10 from production incidents).
 - `skills/surrealdb-js/`
   - `references/api.md` — every method on `Surreal`, every helper class.
