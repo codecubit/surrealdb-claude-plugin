@@ -5,19 +5,20 @@
   },
   "metadata": {
     "description": "SurrealDB v3 expertise for Claude Code",
-    "version": "0.3.1"
+    "version": "0.3.2"
   },
   "plugins": [
     {
       "name": "surrealdb-v3",
       "source": "./",
       "description": "SurrealDB v3 + JS SDK v2 — two skills (SurrealQL and surrealdb npm), two slash commands, MCP server wrapping surreal CLI. 46 production-tested gotchas.",
-      "version": "0.3.1",
+      "version": "0.3.2",
       "author": {
         "name": "Pascu"
       },
       "category": "development",
-      "keywords": ["surrealdb", "surrealql", "database", "graph", "multi-model", "sdk"]
+      "keywords": ["surrealdb", "surrealql", "database", "graph", "multi-model", "sdk"],
+      "homepage": "https://github.com/codecubit/surrealdb-claude-plugin"
     }
   ]
 }
