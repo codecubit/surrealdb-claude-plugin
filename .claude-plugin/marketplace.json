@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "SurrealDB v3 expertise for Claude Code",
-    "version": "0.3.2"
+    "version": "0.3.3"
   },
   "plugins": [
     {
       "name": "surrealdb-v3",
       "source": "./",
       "description": "SurrealDB v3 + JS SDK v2 — two skills (SurrealQL and surrealdb npm), two slash commands, MCP server wrapping surreal CLI. 46 production-tested gotchas.",
-      "version": "0.3.2",
+      "version": "0.3.3",
       "author": {
         "name": "Pascu"
       },

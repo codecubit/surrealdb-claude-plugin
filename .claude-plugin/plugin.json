@@ -1,6 +1,6 @@
 {
   "name": "surrealdb-v3",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "SurrealDB v3 and JavaScript SDK v2 expertise for Claude Code — two skills (SurrealQL and the surrealdb npm package), two slash commands for review and scaffolding, and an MCP server that wraps the surreal CLI.",
   "author": {
     "name": "Pascu",
@@ -9,12 +9,5 @@
   "homepage": "https://github.com/codecubit/surrealdb-claude-plugin#readme",
   "repository": "https://github.com/codecubit/surrealdb-claude-plugin",
   "keywords": ["surrealdb", "surrealql", "database", "graph", "multi-model", "sdk"],
-  "license": "MIT",
-  "mcpServers": {
-    "surreal-cli": {
-      "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp-server/src/index.js"]
-    }
-  },
-  "skills": "./skills/"
+  "license": "MIT"
 }
