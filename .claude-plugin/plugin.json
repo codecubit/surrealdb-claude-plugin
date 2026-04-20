@@ -1,0 +1,10 @@
+{
+  "name": "surrealdb-v3",
+  "version": "0.1.0",
+  "description": "SurrealDB v3 and JavaScript SDK v2 expertise for Claude Code — two skills (SurrealQL and the surrealdb npm package), two slash commands for review and scaffolding, and an MCP server that wraps the surreal CLI.",
+  "author": {
+    "name": "Pascu"
+  },
+  "keywords": ["surrealdb", "surrealql", "database", "graph", "multi-model", "sdk"],
+  "license": "MIT"
+}
